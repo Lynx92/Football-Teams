@@ -25,20 +25,68 @@
         size="1rem"
         flat
         round
-        color="red"
+        color="red-9"
         icon="favorite"
       />
+
       <q-btn
         @click="checkFavorite()"
-        :style="{ 'z-index': 99 }"
         v-else
         size="1rem"
         flat
         round
-        color="red"
+        color="red-9"
         icon="favorite_border"
       />
+
+      <q-btn
+        v-if="teamData.notes"
+        @click="showNotes()"
+        size="1rem"
+        flat
+        round
+        color="yellow-9"
+        icon="note"
+      />
+
+      <q-btn
+        v-if="!teamData.notes && teamData.favorite"
+        @click="showNotes()"
+        size="1rem"
+        flat
+        round
+        color="orange-9"
+        icon="note_add"
+      />
     </div>
+    <q-dialog v-model="prompt">
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Add Notes</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input
+            clearable
+            dense
+            v-model="note"
+            autofocus
+            @keyup.enter="insertNotes()"
+          />
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat icon="cancel" color="red" v-close-popup />
+          <q-btn
+            @click="insertNotes()"
+            flat
+            icon="done"
+            color="green"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-card>
 </template>
 
@@ -53,7 +101,9 @@ export default {
   },
   data: () => ({
     otherImg:
-      "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
+      "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg",
+    prompt: false,
+    note: ""
   }),
   methods: {
     replaceByDefault(e) {
@@ -62,6 +112,18 @@ export default {
 
     checkFavorite() {
       this.$store.dispatch("makeFavAct", this.teamData.id);
+      if (this.teamData.favorite) this.prompt = true;
+    },
+
+    insertNotes() {
+      const payload = { id: this.teamData.id, note: this.note };
+      this.$store.dispatch("addNotesAct", payload);
+      this.prompt = false;
+    },
+
+    showNotes() {
+      this.prompt = true;
+      this.note = this.teamData.notes;
     }
   },
 
@@ -86,6 +148,8 @@ export default {
     opacity: 1;
   }
   .badge {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     top: 1.5rem;
     right: -0.5rem;

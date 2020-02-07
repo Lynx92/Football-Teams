@@ -38,6 +38,10 @@ export default new Vuex.Store({
         state.favorites.push(state.footballTeams[pos]);
         state.footballTeams[pos].favorite = true;
       }
+    },
+    addNotes(state, payload) {
+      const pos = state.footballTeams.findIndex(team => team.id === payload.id);
+      state.footballTeams[pos].notes = payload.note;
     }
   },
   actions: {
@@ -46,6 +50,9 @@ export default new Vuex.Store({
     },
     makeFavAct: ({ commit }, teamID) => {
       commit("makeFav", teamID);
+    },
+    addNotesAct: ({ commit }, payload) => {
+      commit("addNotes", payload);
     }
   },
   plugins: [createPersistedState()]

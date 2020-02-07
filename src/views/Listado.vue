@@ -1,12 +1,22 @@
 <template>
   <div>
-    <div>
+    <div class="row justify-center">
       <q-input
-        class="q-pa-md"
+        class="col-10 q-pa-md"
         clearable
         filled
         v-model="search"
         label="Search your Team"
+      />
+
+      <q-btn
+        class="q-pa-md"
+        @click="sortTeams()"
+        size="1rem"
+        flat
+        round
+        :color="sort ? 'red-9' : 'blue-9'"
+        icon="sort_by_alpha"
       />
     </div>
     <ul>
@@ -34,18 +44,23 @@ export default {
   },
 
   data: () => ({
-    search: ""
+    search: "",
+    sort: false
   }),
 
   methods: {
     getFootballTeams() {
       axios.get("https://api.collegefootballdata.com/teams").then(res => {
-        let footballTeams = res.data.splice(0, 15).map(team => ({
+        let footballTeams = res.data.splice(0,15).map(team => ({
           ...team,
-          favorite: false
+          favorite: false,
+          notes: ""
         }));
         this.$store.dispatch("getTeamsAct", footballTeams);
       });
+    },
+    sortTeams() {
+      this.sort = !this.sort;
     }
   },
 
@@ -56,11 +71,31 @@ export default {
   computed: {
     filteredTeams() {
       if (this.$store.getters.isFootballTeams) {
-        return this.$store.getters.footballTeamsGet.filter(team => {
-          return (
-            team.school.toLowerCase().indexOf(this.search.toLowerCase()) > -1
-          );
-        });
+        return this.$store.getters.footballTeamsGet
+          .filter(team => {
+            return (
+              team.school.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+            );
+          })
+          .sort((a, b) => {
+            if (this.sort) {
+              if (a.school > b.school) {
+                return -1;
+              }
+              if (a.school < b.school) {
+                return 1;
+              }
+              return 0;
+            } else {
+              if (a.school > b.school) {
+                return 1;
+              }
+              if (a.school < b.school) {
+                return -1;
+              }
+              return 0;
+            }
+          });
       }
     }
   }

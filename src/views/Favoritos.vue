@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul>
+    <ul v-if="isFavorites">
       <li v-for="(team, idx) in favorites" :key="idx">
         <Card
           :title="team.school"
@@ -10,6 +10,10 @@
         />
       </li>
     </ul>
+    <div class="justify-center text-h3 q-gutter-y-xl q-pa-md q-mt-xl" v-else>
+      <p>Nothing Found!</p>
+      <p>Add some Teams to your Favourites!</p>
+    </div>
   </div>
 </template>
 
@@ -37,7 +41,7 @@ ul {
 
   li {
     list-style-type: none;
-    min-width: 16rem;
+    min-width: 20rem;
     padding: 1rem;
   }
 }

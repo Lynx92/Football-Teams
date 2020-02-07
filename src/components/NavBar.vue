@@ -3,7 +3,7 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/favoritos">
       <span class="fav"
-        >Favoritos
+        >Favourites
         <div class="counter" v-if="isFavorites">{{ isFavorites }}</div>
       </span>
     </router-link>

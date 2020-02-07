@@ -21,5 +21,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background: radial-gradient(circle, rgba(255,255,255,1) 35%, rgba(0,0,0,0.4864320728291317) 100%, rgba(232,237,238,1) 100%);
+  min-width: 100vw;
+  min-height: 100vh;
 }
 </style>
