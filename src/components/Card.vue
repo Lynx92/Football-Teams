@@ -8,11 +8,11 @@
     >
       <q-img :src="swapImg" @error="replaceByDefault">
         <div class="row absolute-top items-center" :style="{ padding: 0 }">
-          <div class="text-h6 col-12">{{ title }}</div>
+          <div class="text-h6 col-12">{{ teamData.school }}</div>
         </div>
 
         <div
-          :style="{ 'background-color': color, opacity: 0.9 }"
+          :style="{ 'background-color': teamData.color, opacity: 0.9 }"
           class="absolute-bottom"
         />
       </q-img>
@@ -94,9 +94,6 @@
 export default {
   name: "card",
   props: {
-    title: String,
-    imgSrc: Array,
-    color: String,
     teamData: Object
   },
   data: () => ({
@@ -129,8 +126,8 @@ export default {
 
   computed: {
     swapImg() {
-      if (this.imgSrc) {
-        return this.imgSrc[0];
+      if (this.teamData.logos) {
+        return this.teamData.logos[0];
       } else {
         return this.otherImg;
       }

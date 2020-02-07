@@ -10,7 +10,10 @@
         />
       </li>
     </ul>
-    <div class="justify-center text-h3 q-gutter-y-xl q-pa-md q-mt-xl" v-else>
+    <div
+      class="justify-center text-h3 q-gutter-y-xl q-pa-md q-mt-xl noFav"
+      v-else
+    >
       <p>Nothing Found!</p>
       <p>Add some Teams to your Favourites!</p>
     </div>
@@ -44,5 +47,9 @@ ul {
     min-width: 20rem;
     padding: 1rem;
   }
+}
+
+.noFav {
+  opacity: 0.7;
 }
 </style>

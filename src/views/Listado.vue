@@ -21,14 +21,18 @@
     </div>
     <ul>
       <li v-for="(team, id) in filteredTeams" :key="id">
-        <Card
-          :title="team.school"
-          :imgSrc="team.logos"
-          :color="team.color"
-          :teamData="team"
-        />
+        <Card :teamData="team" />
       </li>
     </ul>
+    <div class="loadmore" @click="loadMore()">
+      <q-btn
+        size="2rem"
+        flat
+        round
+        color="purple"
+        icon="arrow_drop_down_circle"
+      />
+    </div>
   </div>
 </template>
 
@@ -36,6 +40,7 @@
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import axios from "axios";
 import Card from "@/components/Card.vue";
+import infiniteScroll from "vue-infinite-scroll";
 
 export default {
   name: "listado",
@@ -45,26 +50,38 @@ export default {
 
   data: () => ({
     search: "",
-    sort: false
+    sort: false,
+    initN: 0,
+    finalN: 15,
+    fullres: []
   }),
 
   methods: {
     getFootballTeams() {
       axios.get("https://api.collegefootballdata.com/teams").then(res => {
-        let footballTeams = res.data.splice(0,15).map(team => ({
-          ...team,
-          favorite: false,
-          notes: ""
-        }));
+        this.fullres = res.data;
+        let footballTeams = this.fullres
+          .splice(this.initN, this.finalN)
+          .map(team => ({
+            ...team,
+            favorite: false,
+            notes: ""
+          }));
         this.$store.dispatch("getTeamsAct", footballTeams);
       });
     },
     sortTeams() {
       this.sort = !this.sort;
+    },
+
+    loadMore() {
+      this.initN = this.initN + 15;
+      this.finalN = this.finalN + 15;
+      this.getFootballTeams();
     }
   },
 
-  beforeMount() {
+  mounted() {
     if (!this.$store.getters.isFootballTeams) this.getFootballTeams();
   },
 
@@ -114,6 +131,17 @@ ul {
     list-style-type: none;
     min-width: 16rem;
     padding: 1rem;
+  }
+}
+
+.loadmore {
+  width: 100vw;
+  background-color: rgba(7, 7, 10, 0.692);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.5s ease-in-out;
+  &:hover {
+    opacity: 1;
   }
 }
 </style>

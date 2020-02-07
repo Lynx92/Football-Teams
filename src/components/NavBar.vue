@@ -30,7 +30,7 @@ export default {
     text-decoration: none;
 
     &.router-link-exact-active {
-      color: #42b983;
+      color: #3de499;
     }
     .fav {
       position: relative;

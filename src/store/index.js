@@ -25,7 +25,16 @@ export default new Vuex.Store({
   },
   mutations: {
     getTeams(state, teams) {
-      state.footballTeams = teams;
+      state.footballTeams.push(...teams);
+
+      state.footballTeams = state.footballTeams.reduce((acc, current) => {
+        const x = acc.find(item => item.id === current.id);
+        if (!x) {
+          return acc.concat([current]);
+        } else {
+          return acc;
+        }
+      }, []);
     },
 
     makeFav(state, teamID) {
