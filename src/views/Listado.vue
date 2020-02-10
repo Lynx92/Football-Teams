@@ -40,7 +40,6 @@
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import axios from "axios";
 import Card from "@/components/Card.vue";
-import infiniteScroll from "vue-infinite-scroll";
 
 export default {
   name: "listado",
